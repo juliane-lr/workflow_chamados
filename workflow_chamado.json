@@ -1,0 +1,176 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "13OmxKEWIix50G10RFdgjPRtQXOnM6ELZj0VGInD8QKU",
+          "mode": "list",
+          "cachedResultName": "Chamados (respostas)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13OmxKEWIix50G10RFdgjPRtQXOnM6ELZj0VGInD8QKU/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1058604323,
+          "mode": "list",
+          "cachedResultName": "Respostas ao formulário 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/13OmxKEWIix50G10RFdgjPRtQXOnM6ELZj0VGInD8QKU/edit#gid=1058604323"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "df598e1a-0c8d-428a-9a42-0c91224c55a8",
+      "name": "Google Sheets Trigger",
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "EkAPn5IcZpdtDvom",
+          "name": "Google Sheets Trigger OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "3776b7d9-e299-4f3c-9da3-5427f64757c5",
+              "leftValue": "={{ $json['Urgência'] }}",
+              "rightValue": "Alta",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "2d45b9df-98be-47b3-b755-48fa18da8c8f",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://discord.com/api/webhooks/1520917653189824562/0ga5mdO2gk-fEc60HvoHsVDeCwc_u4XviCjVBW-62J6KPiP8zs6d99ZdROKh7TIDWYJH",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "content",
+              "value": "=NOVO CHAMADO URGENTE\nCliente: {{ $json.Nome }}\nAssunto: {{ $json.Assunto }} \nE-mail: {{ $json['E-mail'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        448,
+        -160
+      ],
+      "id": "dbc709e2-1110-4738-b0b6-0dc0803dfcf6",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Google Sheets Trigger').item.json['E-mail'] }}",
+        "subject": "=Recebemos seu chamado:  {{ $('Google Sheets Trigger').item.json.Assunto }}",
+        "message": "=Olá,  {{ $('Google Sheets Trigger').item.json.Nome }}!\nRecebemos seus chamado e em breve entraremos em contato.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        464,
+        48
+      ],
+      "id": "6c9ffd43-02c7-41b5-b120-e66c7ee8d5f0",
+      "name": "Send a message",
+      "webhookId": "8ba6ece4-88e2-4a21-af41-5be115884343",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "VHluwwr63K8JI0nm",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Sheets Trigger": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "6760c7a5-64bc-49ff-a800-3be1bb9375c4",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "aafe7f68bfeafbad26d0fcffc9d4208619641e1e8b01154017b03eca81e74ab9"
+  },
+  "nodeGroups": [],
+  "id": "HzrgHSyFi17UC7U0",
+  "tags": []
+}
