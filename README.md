@@ -1,6 +1,6 @@
 # 🛠️ Sistema Automatizado de Triagem, Alerta e Resposta de Chamados
 
-Este projeto apresenta uma solução de engenharia de software e automação de processos utilizando a plataforma **n8n** (Low-Code/Fair-Code). O objetivo principal é orquestrar uma esteira de dados inteligente que intercepta chamados de clientes em tempo real, centraliza as informações em uma planilha/banco de dados e aplica lógica condicional para acionar diferentes APIs de comunicação baseando-se no nível de criticidade informado.
+Este projeto implementa uma automação de atendimento utilizando n8n para reduzir atividades manuais na triagem de chamados. A solução identifica automaticamente a prioridade de cada solicitação, envia alertas em tempo real para a equipe técnica quando necessário e responde automaticamente ao usuário nos demais casos, integrando Google Sheets, Gmail e Discord por meio de APIs e Webhooks.
 
 ---
 
